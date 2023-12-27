@@ -27,3 +27,7 @@ const server = http.createServer((req, res) => {
 server.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
+
+// 8. send the comments.json file to the client
+// open the browser and go to localhost:3000/comments
+// you should see the content of the comments.json file
