@@ -1,33 +1,30 @@
-// create web server
-// create a route for /comments
-// read the comments.json file
-// send the content of the file to the client
-// start the server
-// send the comments.json file to the client
+// create web server with node.js
+// run: node comments.js
 
-// 1. import the http module
-const http = require('http');
-const fs = require('fs');
+var http = require('http');
+var url = require('url');
+var items = [];
 
-// 2. create the server
-const server = http.createServer((req, res) => {
-    // 3. create the route for /comments
-    if (req.url === '/comments') {
-        // 4. read the comments.json file
-        fs.readFile('./comments.json', (err, data) => {
-            // 5. send the content of the file to the client
-            res.write(data);
-            // 6. end the response
-            res.end();
-        });
-    }
+var server = http.createServer(function(req, res) {
+	switch (req.method) {
+		case 'POST':
+			var item = '';
+			req.setEncoding('utf8');
+			req.on('data', function(chunk) {
+				item += chunk;
+			});
+			req.on('end', function() {
+				items.push(item);
+				res.end('OK\n');
+			});
+			break;
+		case 'GET':
+			items.forEach(function(item, i) {
+				res.write(i + ') ' + item + '\n');
+			});
+			res.end();
+			break;
+	}
 });
 
-// 7. start the server
-server.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
-
-// 8. send the comments.json file to the client
-// open the browser and go to localhost:3000/comments
-// you should see the content of the comments.json file
+server.listen(3000); 
